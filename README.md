@@ -1,4 +1,5 @@
 # SkiRacerGame
+
 Ski Racer Get your skier down the Mountain through the salom gates watch out for the avalance
 
 This project was developed by UCL Computer Science students as part of the UCL Industry Exchange Network (http://ixn.org.uk) which pairs university students with industry as part of their curriculum. Academic Project lead - Dr Dean Mohamedally, d.mohamedally@ucl.ac.uk 1st Year UG Student project team Supervised by - Prof. Eleanor Main of UCL/GOSH
