@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e0fdfb2e579864261b601805c9f24304
+timeCreated: 1523702987
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - fallingObstaclePrefab: {instanceID: 0}
+  - linePrefab: {instanceID: 0}
+  - outPrefab: {instanceID: 0}
+  - treePrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
