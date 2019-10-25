@@ -65,17 +65,14 @@ public class PlayerControl : MonoBehaviour {
 
     void Update()
     {
-        print("Breaths per: " + toDoBreaths + " Breaths: " + breaths);
+        //print("Breaths per: " + toDoBreaths + " Breaths: " + breaths);
 
         if (isConfig)
             left = 0;
 
         if (breaths >= toDoBreaths)
         {
-            if (OnGameOver != null)
-            {
-                OnGameOver();
-            }
+            OnGameOver?.Invoke();
         }
         
         speed = 7f * Difficulty.GetDifficultyPercent(counter) + 3f;
