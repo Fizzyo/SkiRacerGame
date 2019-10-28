@@ -24,7 +24,7 @@ public class Spawner : MonoBehaviour {
 		screenHalfSize = new Vector2(Camera.main.aspect * Camera.main.orthographicSize, Camera.main.orthographicSize);
         lastSlalomX = 1f;
         spawnSize = 0.3f;
-        secondsBetweenSpawns = Mathf.Lerp(delayMax, delayMin, Difficulty.GetDifficultyPercent(player.counter));
+        secondsBetweenSpawns = Mathf.Lerp(delayMax, delayMin, SessionData.GetDifficultyPercent(SessionData.Counter));
         player = FindObjectOfType<PlayerControl>();
     }
 

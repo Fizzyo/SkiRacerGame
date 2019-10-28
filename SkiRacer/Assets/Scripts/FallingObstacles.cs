@@ -15,14 +15,12 @@ public class FallingObstacles : MonoBehaviour {
     {
         visibleHeight = Camera.main.orthographicSize - transform.localScale.y;
         original = false;
-        PlayerControl player = FindObjectOfType<PlayerControl>();
-        speed = Mathf.Lerp(speedMax, speedMin, Difficulty.GetDifficultyPercent(player.counter));
+        speed = Mathf.Lerp(speedMax, speedMin, SessionData.GetDifficultyPercent(SessionData.Counter));
 	}
 
 	void Update()
     {
-        PlayerControl player = FindObjectOfType<PlayerControl>();
-        speed = Mathf.Lerp(speedMin, speedMax, Difficulty.GetDifficultyPercent(player.counter));
+        speed = Mathf.Lerp(speedMin, speedMax, SessionData.GetDifficultyPercent(SessionData.Counter));
         transform.Translate (Vector3.up * speed * Time.deltaTime);
 
         if (transform.position.y > visibleHeight + 2 * transform.localScale.y && !original)

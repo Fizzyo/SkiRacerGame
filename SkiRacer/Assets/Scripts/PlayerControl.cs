@@ -8,7 +8,6 @@ public class PlayerControl : MonoBehaviour {
     public bool isConfig;
 	public float speed = 7f;
     public int left;
-    public int counter;
     public event System.Action OnGameOver;
 
     public GameObject StreakText;
@@ -18,9 +17,7 @@ public class PlayerControl : MonoBehaviour {
     public Sprite rightGuy;
     
     private bool prevSpace;
-    private int score;
-    private int toDoBreaths;
-    private int breaths;
+
     private float screenHalfWidth;
 
     private SpriteRenderer spriteR;
@@ -29,53 +26,29 @@ public class PlayerControl : MonoBehaviour {
 
     void Start()
     {
-        FizzyoFramework.Instance.Recogniser.BreathStarted += OnBreathStarted;
-        FizzyoFramework.Instance.Recogniser.BreathComplete += OnBreathEnded;
-        score = 0;
-        breaths = 0;
-        toDoBreaths = BreathsCount.BreathsPer;
-//        FizzyoFramework.Instance.Device.SetCalibrationPressure(0.4f);
-        counter = 1;
+        SessionData.Session.StartSession(true);
+        SessionData.Session.SessionComplete += (s, e) => { OnGameOver?.Invoke(); };
+
+        SessionData.Score = 0;
+        SessionData.Counter = 1;
         left = -1;
 		float halfPlayerWidth = transform.localScale.x / 2f;
 		screenHalfWidth = Camera.main.aspect * Camera.main.orthographicSize - halfPlayerWidth;
         spriteR = gameObject.GetComponent<SpriteRenderer>();
-        pointsTxt.text = score.ToString();
+        pointsTxt.text = SessionData.Score.ToString();
+
+
 	}
-
-    int GetScore()
-    {
-        return score;
-    }
-
-    void OnBreathStarted(object sender)
-    {
-        Debug.Log("Breath started");
-    }
-
-    void OnBreathEnded(object sender, ExhalationCompleteEventArgs e)
-    {
-        breaths++;
-    }
-
-    public void SetBreathsPer(int breathes)
-    {
-        toDoBreaths = breathes;
-    }
 
     void Update()
     {
         //print("Breaths per: " + toDoBreaths + " Breaths: " + breaths);
+        SessionData.Session.Update();
 
         if (isConfig)
             left = 0;
-
-        if (breaths >= toDoBreaths)
-        {
-            OnGameOver?.Invoke();
-        }
         
-        speed = 7f * Difficulty.GetDifficultyPercent(counter) + 3f;
+        speed = 7f * SessionData.GetDifficultyPercent(SessionData.Counter) + 3f;
         space = FizzyoFramework.Instance.Device.ButtonDown();
 
         if (space != prevSpace && space != false)
@@ -98,14 +71,14 @@ public class PlayerControl : MonoBehaviour {
 
     public void IncreaseScore(int amount)
     {
-        score += amount;
+        SessionData.Score += amount;
     }
 
     private void OnTriggerStay2D(Collider2D triggerCollider)
     {
         if (triggerCollider.tag == "Avalanche")
         {
-            counter = 0;
+            SessionData.Counter = 0;
             left = 0;
             pointsTxt.color = new Color(0, 0, 0);
         }
@@ -123,24 +96,24 @@ public class PlayerControl : MonoBehaviour {
     {
         if(triggerCollider.tag == "Finish")
         {
-            score += 1;
-            counter += 1;
-            if (counter >= 4)
+            IncreaseScore(1);
+            SessionData.Counter += 1;
+            if (SessionData.Counter >= 4)
             {
                 Vector2 spawnPosition = new Vector2(this.transform.position.x + 1, this.transform.position.y - 1);
                 GameObject streakTextBox = (GameObject)Instantiate(StreakText, spawnPosition, Quaternion.identity);
                 TextMesh theText = streakTextBox.transform.GetComponent<TextMesh>();
                 theText.text = "Streak!";
-                counter = 1;
+                SessionData.Counter = 1;
                 pointsTxt.color = new Color(1f, .17f, 0.0f);
             }
-            pointsTxt.text = score.ToString();
+            pointsTxt.text = SessionData.Score.ToString();
         }
         else if (triggerCollider.tag == "Out")
         {
-            counter = 2;
+            SessionData.Counter = 2;
             pointsTxt.color = new Color(0, 0, 0);
-            pointsTxt.text = score.ToString();
+            pointsTxt.text = SessionData.Score.ToString();
         }
     }
 
@@ -148,7 +121,7 @@ public class PlayerControl : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Tree")
         {
-            counter = 1;
+            SessionData.Counter = 1;
             Vector2 spawnPosition = new Vector2(this.transform.position.x + 1, this.transform.position.y + 1);
             GameObject streakTextBox = (GameObject)Instantiate(StreakText, spawnPosition, Quaternion.identity);
             TextMesh theText = streakTextBox.transform.GetComponent<TextMesh>();

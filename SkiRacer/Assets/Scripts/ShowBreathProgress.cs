@@ -9,6 +9,8 @@ public class ShowBreathProgress : MonoBehaviour
     private float startTime = 0;
     private bool exhaling = false;
     private float progressAmount = 0;
+    private float progressLerp = 0;
+    private float lerpTime = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,13 @@ public class ShowBreathProgress : MonoBehaviour
             float progress = exhaleTime / FizzyoFramework.Instance.Device.maxPressureCalibrated;
 
             progressAmount = Mathf.Min(progress, 1.0f);
+        }
+        else
+        {
+            if (progressAmount > 0)
+            {
+                progressAmount -= 0.5f * Time.deltaTime;
+            }
         }
     }
 
